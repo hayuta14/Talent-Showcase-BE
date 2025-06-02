@@ -1,0 +1,6 @@
+@TalentShowCase.API_HostAddress = http://localhost:5068
+
+GET {{TalentShowCase.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
