@@ -22,8 +22,6 @@ public class User
     [StringLength(255)]
     public string PasswordHash { get; set; } = string.Empty;
 
-    public string? FirstName { get; set; }
-    public string? LastName { get; set; }
     public string? Bio { get; set; }
 
     [StringLength(255)]
@@ -35,11 +33,17 @@ public class User
     [StringLength(255)]
     public string? ProfilePictureUrl { get; set; }
 
+    [Required]
+    public int RoleId { get; set; } = 2; // Default role ID (User)
+
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime? LastLoginAt { get; set; }
     public bool IsActive { get; set; } = true;
 
     // Navigation properties
+    [ForeignKey("RoleId")]
+    public Role Role { get; set; } = null!;
+
     public ICollection<Post> Posts { get; set; } = new List<Post>();
     public ICollection<PostLike> PostLikes { get; set; } = new List<PostLike>();
     public ICollection<Comment> Comments { get; set; } = new List<Comment>();

@@ -26,10 +26,22 @@ public class ApplicationDbContext : DbContext
     public DbSet<Community> Communities { get; set; } = null!;
     public DbSet<CommunityMember> CommunityMembers { get; set; } = null!;
     public DbSet<TalentCategory> TalentCategories { get; set; } = null!;
+    public DbSet<Role> Roles { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+
+        // Role configurations
+        modelBuilder.Entity<Role>()
+            .HasIndex(r => r.Name)
+            .IsUnique();
+
+        // Seed roles
+        modelBuilder.Entity<Role>().HasData(
+            new Role { RoleId = 1, Name = "Admin", Description = "Administrator with full access" },
+            new Role { RoleId = 2, Name = "User", Description = "Regular user with standard access" }
+        );
 
         // User configurations
         modelBuilder.Entity<User>()
@@ -39,6 +51,17 @@ public class ApplicationDbContext : DbContext
         modelBuilder.Entity<User>()
             .HasIndex(u => u.Username)
             .IsUnique();
+
+        modelBuilder.Entity<User>()
+            .HasOne(u => u.Role)
+            .WithMany(r => r.Users)
+            .HasForeignKey(u => u.RoleId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        // Set default role to User (RoleId = 2)
+        modelBuilder.Entity<User>()
+            .Property(u => u.RoleId)
+            .HasDefaultValue(2);
 
         // RefreshToken configurations
         modelBuilder.Entity<RefreshToken>()
