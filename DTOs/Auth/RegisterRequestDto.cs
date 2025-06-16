@@ -15,7 +15,8 @@ public class RegisterRequestDto
     [Required]
     [MinLength(6)]
     public string Password { get; set; } = string.Empty;
+    [Required]
+    [RegularExpression(@"^\+?\d{10,15}$", ErrorMessage = "Phone number must be between 10 and 15 digits and can start with '+'")]
+    public string PhoneNumber { get; set; }
 
-    public string? FirstName { get; set; }
-    public string? LastName { get; set; }
 } 

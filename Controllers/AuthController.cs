@@ -72,7 +72,7 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("revoke-token")]      
-    [Authorize]
+    [Authorize(Policy = "RequireUserRole")]
     public async Task<ActionResult<ApiResponse<string>>> RevokeToken([FromBody] RevokeTokenRequestDto request)
     {
         var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
