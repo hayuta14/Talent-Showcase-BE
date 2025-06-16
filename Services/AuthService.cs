@@ -1,6 +1,8 @@
-using TalentShowCase.API.DTOs.Auth;
-using TalentShowCase.API.Models.Auth;
+using Microsoft.EntityFrameworkCore;
+using TalentShowCase.API.Data;
+using TalentShowCase.API.Models;
 using TalentShowCase.API.Repositories;
+using TalentShowCase.API.DTOs.Auth;
 
 namespace TalentShowCase.API.Services;
 
@@ -60,7 +62,7 @@ public class AuthService : IAuthService
         var refreshToken = new RefreshToken
         {
             Token = tokens.RefreshToken,
-            UserId = user.Id,
+            UserId = user.UserId,
             ExpiresAt = DateTime.UtcNow.AddDays(7),
             CreatedAt = DateTime.UtcNow,
             CreatedByIp = "Unknown" // Will be updated in controller

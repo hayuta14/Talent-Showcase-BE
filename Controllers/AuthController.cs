@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using TalentShowCase.API.Data;
-using TalentShowCase.API.Models.Auth;
+using TalentShowCase.API.Models;
 using TalentShowCase.API.Services;
 using TalentShowCase.API.DTOs.Auth;
 using TalentShowCase.API.DTOs.Common;

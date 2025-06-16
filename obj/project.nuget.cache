@@ -1,18 +1,9 @@
 {
   "version": 2,
-  "dgSpecHash": "+UjddwIFfKA=",
+  "dgSpecHash": "hMfF0Me1YBC5XCs801kIgcmF+Hy/yzmyfVmN63tyODFXEeme1QhdykllN5rmGgY1GpYmPEplDumyUOicLjP0lg==",
   "success": true,
-  "projectFilePath": "C:\\ta\\aptech\\hklll\\projectlll\\Backend\\Talent-Showcase-BE\\TalentShowCase.API.csproj",
+  "projectFilePath": "/home/hayuta/Documents/program/C-Sharp/TalentShowCase-BE/Talent-Showcase-BE/TalentShowCase.API.csproj",
   "expectedPackageFiles": [
-<<<<<<< HEAD
-    "C:\\Users\\oanhp\\.nuget\\packages\\microsoft.aspnetcore.openapi\\8.0.0\\microsoft.aspnetcore.openapi.8.0.0.nupkg.sha512",
-    "C:\\Users\\oanhp\\.nuget\\packages\\microsoft.extensions.apidescription.server\\6.0.5\\microsoft.extensions.apidescription.server.6.0.5.nupkg.sha512",
-    "C:\\Users\\oanhp\\.nuget\\packages\\microsoft.openapi\\1.4.3\\microsoft.openapi.1.4.3.nupkg.sha512",
-    "C:\\Users\\oanhp\\.nuget\\packages\\swashbuckle.aspnetcore\\6.5.0\\swashbuckle.aspnetcore.6.5.0.nupkg.sha512",
-    "C:\\Users\\oanhp\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\6.5.0\\swashbuckle.aspnetcore.swagger.6.5.0.nupkg.sha512",
-    "C:\\Users\\oanhp\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\6.5.0\\swashbuckle.aspnetcore.swaggergen.6.5.0.nupkg.sha512",
-    "C:\\Users\\oanhp\\.nuget\\packages\\swashbuckle.aspnetcore.swaggerui\\6.5.0\\swashbuckle.aspnetcore.swaggerui.6.5.0.nupkg.sha512"
-=======
     "/home/hayuta/.nuget/packages/bcrypt.net-next/4.0.3/bcrypt.net-next.4.0.3.nupkg.sha512",
     "/home/hayuta/.nuget/packages/humanizer.core/2.14.1/humanizer.core.2.14.1.nupkg.sha512",
     "/home/hayuta/.nuget/packages/microsoft.aspnetcore.authentication.jwtbearer/8.0.2/microsoft.aspnetcore.authentication.jwtbearer.8.0.2.nupkg.sha512",
@@ -84,16 +75,14 @@
     "/home/hayuta/.nuget/packages/system.text.encoding.codepages/6.0.0/system.text.encoding.codepages.6.0.0.nupkg.sha512",
     "/home/hayuta/.nuget/packages/system.text.encodings.web/8.0.0/system.text.encodings.web.8.0.0.nupkg.sha512",
     "/home/hayuta/.nuget/packages/system.text.json/8.0.0/system.text.json.8.0.0.nupkg.sha512",
-    "/home/hayuta/.nuget/packages/system.threading.channels/6.0.0/system.threading.channels.6.0.0.nupkg.sha512",
-    "/home/hayuta/.nuget/packages/microsoft.netcore.app.ref/8.0.15/microsoft.netcore.app.ref.8.0.15.nupkg.sha512",
-    "/home/hayuta/.nuget/packages/microsoft.aspnetcore.app.ref/8.0.15/microsoft.aspnetcore.app.ref.8.0.15.nupkg.sha512",
-<<<<<<< HEAD
-    "/home/hayuta/.nuget/packages/microsoft.netcore.app.host.linux-x64/8.0.15/microsoft.netcore.app.host.linux-x64.8.0.15.nupkg.sha512",
-    "/home/hayuta/.nuget/packages/microsoft.netcore.app.ref/8.0.15/microsoft.netcore.app.ref.8.0.15.nupkg.sha512"
->>>>>>> 3d95272 (feature auth done)
-=======
-    "/home/hayuta/.nuget/packages/microsoft.netcore.app.host.linux-x64/8.0.15/microsoft.netcore.app.host.linux-x64.8.0.15.nupkg.sha512"
->>>>>>> a826592 (Auth feature done)
+    "/home/hayuta/.nuget/packages/system.threading.channels/6.0.0/system.threading.channels.6.0.0.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "Undefined",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Problem reading the cache file /home/hayuta/Documents/program/C-Sharp/TalentShowCase-BE/Talent-Showcase-BE/obj/project.nuget.cache : Unexpected character encountered while parsing value: <. Path 'expectedPackageFiles', line 7, position 0."
+    }
+  ]
 }

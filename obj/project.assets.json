@@ -3789,32 +3789,24 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\oanhp\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "/home/hayuta/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\ta\\aptech\\hklll\\projectlll\\Backend\\Talent-Showcase-BE\\TalentShowCase.API.csproj",
+      "projectUniqueName": "/home/hayuta/Documents/program/C-Sharp/TalentShowCase-BE/Talent-Showcase-BE/TalentShowCase.API.csproj",
       "projectName": "TalentShowCase.API",
-      "projectPath": "C:\\ta\\aptech\\hklll\\projectlll\\Backend\\Talent-Showcase-BE\\TalentShowCase.API.csproj",
-      "packagesPath": "C:\\Users\\oanhp\\.nuget\\packages\\",
-      "outputPath": "C:\\ta\\aptech\\hklll\\projectlll\\Backend\\Talent-Showcase-BE\\obj\\",
+      "projectPath": "/home/hayuta/Documents/program/C-Sharp/TalentShowCase-BE/Talent-Showcase-BE/TalentShowCase.API.csproj",
+      "packagesPath": "/home/hayuta/.nuget/packages/",
+      "outputPath": "/home/hayuta/Documents/program/C-Sharp/TalentShowCase-BE/Talent-Showcase-BE/obj/",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-      ],
       "configFilePaths": [
-        "C:\\Users\\oanhp\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "/home/hayuta/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
       ],
       "sources": {
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -3827,11 +3819,6 @@
         "warnAsError": [
           "NU1605"
         ]
-      },
-      "restoreAuditProperties": {
-        "enableAudit": "true",
-        "auditLevel": "low",
-        "auditMode": "direct"
       }
     },
     "frameworks": {
@@ -3904,8 +3891,16 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.410/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/8.0.117/PortableRuntimeIdentifierGraph.json"
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "Undefined",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Problem reading the cache file /home/hayuta/Documents/program/C-Sharp/TalentShowCase-BE/Talent-Showcase-BE/obj/project.nuget.cache : Unexpected character encountered while parsing value: <. Path 'expectedPackageFiles', line 7, position 0."
+    }
+  ]
 }

@@ -1,5 +1,5 @@
+using TalentShowCase.API.Models;
 using TalentShowCase.API.DTOs.Auth;
-using TalentShowCase.API.Models.Auth;
 
 namespace TalentShowCase.API.Services;
 

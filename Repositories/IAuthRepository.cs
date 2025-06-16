@@ -1,4 +1,4 @@
-using TalentShowCase.API.Models.Auth;
+using TalentShowCase.API.Models;
 
 namespace TalentShowCase.API.Repositories;
 
