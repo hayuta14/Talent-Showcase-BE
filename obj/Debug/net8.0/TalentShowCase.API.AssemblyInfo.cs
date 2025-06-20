@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TalentShowCase.API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3c493d17b0274bc483fefc730b0b133701e5354c")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+dc8d035cdfdf04610667bae33ec10c540f38e5d4")]
 [assembly: System.Reflection.AssemblyProductAttribute("TalentShowCase.API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TalentShowCase.API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
