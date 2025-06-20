@@ -12,7 +12,7 @@ public class ApiResponse<T>
     public string? Message { get; set; }
 
     [JsonPropertyName("data")]
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public T? Data { get; set; }
 
     [JsonPropertyName("Code")]
@@ -25,13 +25,18 @@ public class ApiResponse<T>
     [JsonPropertyName("timestamp")]
     public DateTime Timestamp { get; set; } = DateTime.UtcNow;
 
-    public static ApiResponse<T> Succeed(T data, int code = 200)
+    [JsonPropertyName("metadata")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public object? Metadata { get; set; }
+
+    public static ApiResponse<T> Succeed(T data, int code = 200, object? metadata = null)
     {
         return new ApiResponse<T>
         {
             Success = true,
             Code = code,
             Data = data,
+            Metadata = metadata
         };
     }
 
@@ -41,6 +46,7 @@ public class ApiResponse<T>
         {
             Success = false,
             Code = errorCode,
+            Message = message,
             Errors = errors,
             Timestamp = DateTime.UtcNow
         };
