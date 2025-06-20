@@ -68,4 +68,8 @@ bld/
 **/packages/*
 !**/packages/build/
 *.nuget.props
+<<<<<<< HEAD
 *.nuget.targets obj/
+=======
+*.nuget.targets 
+>>>>>>> 880663d (init project)
