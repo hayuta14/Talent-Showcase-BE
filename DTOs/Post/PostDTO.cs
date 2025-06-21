@@ -8,9 +8,10 @@ namespace TalentShowCase.API.DTOs.Post
         public int CategoryId { get; set; }
 
         [Required]
-        public string Description { get; set; }
+        public string Description { get; set; } = string.Empty;
 
-        public string VideoUrl { get; set; }
+        public string VideoUrl { get; set; } = string.Empty;
+
 
         [Required]
         public bool IsPublic { get; set; }

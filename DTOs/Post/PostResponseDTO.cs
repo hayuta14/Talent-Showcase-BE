@@ -7,8 +7,11 @@ public class PostResponseDTO
     public int? CategoryId { get; set; }
     public string Description { get; set; } = string.Empty;
     public string VideoUrl { get; set; } = string.Empty;
+    public string UserImageUrl { get; set; } = string.Empty;
+    public string Username { get; set; } = string.Empty;
     public bool IsPublic { get; set; }
     public DateTime UploadedAt { get; set; }
     public int LikeCount { get; set; }
     public int CommentCount { get; set; }
+    public bool LikedByCurrentUser { get; set; }
 } 

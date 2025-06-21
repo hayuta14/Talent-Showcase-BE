@@ -62,7 +62,7 @@ public class PostController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<ApiResponse<object>>> GetAll([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
     {
-        var (items, metadata) = await _service.GetAllAsync(page, pageSize);
+        var (items, metadata) = await _service.GetAllAsync(page, pageSize, GetUserId());
         var data = new { items };
         return Ok(ApiResponse<object>.Succeed(data, 200, metadata));
     }

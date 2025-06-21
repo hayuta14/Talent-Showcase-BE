@@ -9,7 +9,7 @@ public interface IPostService
     Task<PostResponseDTO?> GetByIdAsync(int id);
     Task<PostResponseDTO> UpdateAsync(int id, PostDTO dto, int userId);
     Task<bool> DeleteAsync(int id, int userId);
-    Task<(List<PostResponseDTO> Items, object Metadata)> GetAllAsync(int page, int pageSize);
+    Task<(List<PostResponseDTO> Items, object Metadata)> GetAllAsync(int page, int pageSize, int userId);
     
     // Like methods
     Task<(bool Success, string? Error)> LikePostAsync(PostLikeDTO dto, int userId);

@@ -13,17 +13,20 @@ public class PostService : IPostService
         _repo = repo;
     }
 
-    private async Task<PostResponseDTO> ToResponseDTOAsync(Post p) => new()
+    private async Task<PostResponseDTO> ToResponseDTOAsync(Post p, int userId) => new()
     {
         Id = p.PostId,
         UserId = p.UserId,
         CategoryId = p.CategoryId,
         Description = p.Description,
-        VideoUrl = p.VideoUrl,
+        VideoUrl = p.VideoUrl ?? string.Empty,
+        UserImageUrl = p.User?.ProfilePictureUrl ?? string.Empty,
+        Username = p.User?.Username ?? string.Empty,
         IsPublic = p.IsPublic,
         UploadedAt = p.UploadedAt,
         LikeCount = await _repo.GetLikeCountAsync(p.PostId),
-        CommentCount = await _repo.GetCommentCountAsync(p.PostId)
+        CommentCount = await _repo.GetCommentCountAsync(p.PostId),
+        LikedByCurrentUser = await _repo.ExistsLikeAsync(p.PostId, userId)
     };
 
     private PostResponseDTO ToResponseDTO(Post p) => new()
@@ -46,18 +49,18 @@ public class PostService : IPostService
             UserId = userId,
             CategoryId = dto.CategoryId,
             Description = dto.Description,
-            VideoUrl = dto.VideoUrl,
+            VideoUrl = dto.VideoUrl ?? string.Empty,
             IsPublic = dto.IsPublic,
             UploadedAt = DateTime.UtcNow
         };
         var created = await _repo.CreateAsync(post);
-        return await ToResponseDTOAsync(created);
+        return await ToResponseDTOAsync(created, userId);
     }
 
     public async Task<PostResponseDTO?> GetByIdAsync(int id)
     {
         var p = await _repo.GetByIdAsync(id);
-        return p == null ? null : await ToResponseDTOAsync(p);
+        return p == null ? null : await ToResponseDTOAsync(p, 0);
     }
 
     public async Task<PostResponseDTO> UpdateAsync(int id, PostDTO dto, int userId)
@@ -70,7 +73,7 @@ public class PostService : IPostService
         p.VideoUrl = dto.VideoUrl;
         p.IsPublic = dto.IsPublic;
         var updated = await _repo.UpdateAsync(p);
-        return await ToResponseDTOAsync(updated);
+        return await ToResponseDTOAsync(updated, userId);
     }
 
     public async Task<bool> DeleteAsync(int id, int userId)
@@ -80,13 +83,13 @@ public class PostService : IPostService
         return await _repo.DeleteAsync(id);
     }
 
-    public async Task<(List<PostResponseDTO> Items, object Metadata)> GetAllAsync(int page, int pageSize)
+    public async Task<(List<PostResponseDTO> Items, object Metadata)> GetAllAsync(int page, int pageSize, int userId)
     {
         var (items, totalItems) = await _repo.GetAllAsync(page, pageSize);
         var responseItems = new List<PostResponseDTO>();
         foreach (var item in items)
         {
-            responseItems.Add(await ToResponseDTOAsync(item));
+            responseItems.Add(await ToResponseDTOAsync(item, userId));
         }
         var metadata = new {
             page,
@@ -150,7 +153,8 @@ public class PostService : IPostService
             {
                 Id = created.CommentId,
                 PostId = created.PostId,
-                UserId = created.UserId,
+                Username = created.User?.Username ?? string.Empty,
+                UserImageUrl = created.User?.ProfilePictureUrl ?? string.Empty,
                 Content = created.Content,
                 CreatedAt = created.CreatedAt
             };
@@ -171,7 +175,8 @@ public class PostService : IPostService
             {
                 Id = c.CommentId,
                 PostId = c.PostId,
-                UserId = c.UserId,
+                Username = c.User?.Username ?? string.Empty,
+                UserImageUrl = c.User?.ProfilePictureUrl ?? string.Empty,
                 Content = c.Content,
                 CreatedAt = c.CreatedAt
             }).ToList();
@@ -207,7 +212,8 @@ public class PostService : IPostService
             {
                 Id = updated.CommentId,
                 PostId = updated.PostId,
-                UserId = updated.UserId,
+                Username = updated.User?.Username ?? string.Empty,
+                UserImageUrl = updated.User?.ProfilePictureUrl ?? string.Empty,
                 Content = updated.Content,
                 CreatedAt = updated.CreatedAt
             };

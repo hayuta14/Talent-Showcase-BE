@@ -1,105 +1,205 @@
-# TalentShowCase.API
+# Talent Showcase Backend API
 
-## Project Overview
+A .NET 8 Web API for the Talent Showcase application with comprehensive user management, content creation, and media handling capabilities.
 
-This is the backend API for the Talent Show Case application, built with ASP.NET Core. It provides authentication (registration, login, token refresh) using JWT, and interacts with a PostgreSQL database for data persistence and Redis for caching/token management. The API is designed to be a robust and scalable foundation for a talent showcase platform.
+## Features
+
+- **Authentication & Authorization**: JWT-based authentication with refresh tokens
+- **User Management**: User registration, login, and profile management
+- **Content Management**: Posts, categories, likes, and comments
+- **Media Handling**: Image and video upload via Cloudinary
+- **Real-time Features**: Redis integration for caching and real-time features
+- **Comprehensive Documentation**: Swagger/OpenAPI documentation optimized for Orval
+
+## Technology Stack
+
+- **.NET 8** - Latest .NET framework
+- **Entity Framework Core** - ORM for database operations
+- **PostgreSQL** - Primary database
+- **Redis** - Caching and real-time features
+- **JWT** - Authentication and authorization
+- **Cloudinary** - Media storage and management
+- **Swagger/OpenAPI** - API documentation
+- **Serilog** - Structured logging
 
 ## Getting Started
 
 ### Prerequisites
 
-- .NET SDK (version 8.0 or later)
-- Docker and Docker Compose (for PostgreSQL and Redis)
-- PostgreSQL client (e.g., DBeaver, pgAdmin) for database management (optional, but recommended)
+- .NET 8 SDK
+- PostgreSQL
+- Redis
+- Cloudinary account
 
-### Setup
+### Configuration
 
-1.  **Clone the repository:**
-    ```bash
-    git clone <repository_url>
-    cd TalentShowCase-BE/TalentShowCase.API
-    ```
+1. **Database Connection**: Update the connection string in `appsettings.json`
+2. **Redis Connection**: Configure Redis connection string
+3. **JWT Settings**: Set your JWT secret key
+4. **Cloudinary**: Configure your Cloudinary credentials
+5. **CORS**: Update allowed origins for your frontend
 
-2.  **Start Database Services (PostgreSQL and Redis) using Docker Compose:**
-    Ensure Docker Desktop (or Docker Engine) is running on your system.
-    ```bash
-    docker compose up -d
-    ```
-    This command will start two containers: one for PostgreSQL (on `localhost:5432`) and one for Redis (on `localhost:6379`).
+### Running the Application
 
-3.  **Run Database Migrations:**
-    First, ensure you have the `dotnet-ef` global tool installed. If not, install it:
-    ```bash
-    dotnet tool install --global dotnet-ef
-    ```
-    Then, apply the migrations to create the database schema and tables. Make sure your `talentshowcase` database in PostgreSQL is empty or does not exist before running this command to avoid conflicts.
-    ```bash
-    dotnet ef database update
-    ```
-    _If you encounter errors like "relation 'Users' already exists" or "password authentication failed for user 'sa'", please ensure you have deleted the `talentshowcase` database in your PostgreSQL client (e.g., DBeaver) and that your `appsettings.json` and `appsettings.Development.json` files have the correct PostgreSQL connection string with `Username=postgres`._
+```bash
+# Restore dependencies
+dotnet restore
 
-4.  **Configure Application Settings:**
-    Verify your `appsettings.json` and `appsettings.Development.json` files for correct connection strings and JWT settings. Ensure the `JwtSettings:Secret` key is at least 32 characters long for `HMAC-SHA256`.
+# Run database migrations
+dotnet ef database update
 
-    `appsettings.json` (example):
-    ```json
-    {
-      "ConnectionStrings": {
-        "DefaultConnection": "Host=localhost;Port=5432;Database=talentshowcase;Username=postgres;Password=postgres;Trust Server Certificate=true;",
-        "Redis": "localhost:6379"
+# Start the application
+dotnet run
+```
+
+The API will be available at `http://localhost:5000` and Swagger documentation at `http://localhost:5000`.
+
+## API Documentation
+
+### Swagger UI
+The API includes comprehensive Swagger documentation with:
+- Interactive API testing
+- Request/response examples
+- Authentication support
+- Detailed parameter descriptions
+- Response type documentation
+
+### OpenAPI Specification
+The OpenAPI specification is available at `/swagger/v1/swagger.json` and is optimized for use with code generation tools like Orval.
+
+## Frontend Integration with Orval
+
+### Orval Configuration
+To generate TypeScript client code using Orval, create an `orval.config.ts` file:
+
+```typescript
+import { defineConfig } from 'orval';
+
+export default defineConfig({
+  talentShowcase: {
+    input: {
+      target: 'http://localhost:5000/swagger/v1/swagger.json',
+    },
+    output: {
+      mode: 'split',
+      target: './src/api/generated',
+      schemas: './src/api/generated/model',
+      client: 'react-query',
+      override: {
+        mutator: {
+          path: './src/api/mutator/custom-instance.ts',
+          name: 'customInstance',
+        },
       },
-      "JwtSettings": {
-        "Secret": "thisisalongandsecurejwtsecretkeyforapplicationsdevelopmentpurposes",
-        "ExpirationInMinutes": 60
-      },
-      "CorsSettings": {
-        "AllowedOrigins": [
-          "http://localhost:3000",
-          "http://localhost:5173"
-        ]
-      }
-    }
-    ```
+    },
+    hooks: {
+      afterAllFilesWrite: 'prettier --write',
+    },
+  },
+});
+```
 
-    `appsettings.Development.json` (example):
-    ```json
-    {
-      "ConnectionStrings": {
-        "DefaultConnection": "Host=localhost;Port=5432;Database=talentshowcase;Username=postgres;Password=postgres;Trust Server Certificate=true;"
-      },
-      "JwtSettings": {
-        "Secret": "thisisalongandsecurejwtsecretkeyforapplicationsdevelopmentpurposes",
-        "ExpirationInMinutes": 120
-      },
-      "CorsSettings": {
-        "AllowedOrigins": [
-          "http://localhost:3000",
-          "http://localhost:8080",
-          "http://localhost:4200"
-        ]
-      }
-    }
-    ```
+### Generated Client Features
+- Type-safe API calls
+- React Query integration
+- Automatic request/response typing
+- Error handling
+- Authentication token management
 
-5.  **Run the Application:**
-    Navigate to the project root directory (`TalentShowCase.API`) in your terminal and run:
-    ```bash
-    dotnet run
-    ```
-    The API will typically run on `https://localhost:5071` (or a similar port assigned by Kestrel). Check the console output for the exact URL where the application is listening.
+## API Endpoints
 
-## API Endpoints (via Swagger)
+### Authentication
+- `POST /api/v1/auth/register` - User registration
+- `POST /api/v1/auth/login` - User login
+- `POST /api/v1/auth/refresh-token` - Refresh access token
+- `POST /api/v1/auth/revoke-token` - Revoke refresh token
 
-Once the application is running, you can access the Swagger UI for interactive API documentation and testing at:
+### User Management
+- `GET /api/v1/user/get-profile` - Get user profile
+- `PATCH /api/v1/user/create-profile` - Update user profile
 
-`http://localhost:<your_api_port>/swagger`
+### Categories
+- `GET /api/v1/category` - Get all categories
+- `POST /api/v1/category` - Create new category
+- `GET /api/v1/category/{id}` - Get category by ID
+- `PUT /api/v1/category/{id}` - Update category
+- `DELETE /api/v1/category/{id}` - Delete category
 
-(e.g., `http://localhost:5071/swagger`)
+### Posts
+- `GET /api/v1/post` - Get all posts with pagination
+- `POST /api/v1/post` - Create new post
+- `GET /api/v1/post/{id}` - Get post by ID
+- `PUT /api/v1/post/{id}` - Update post
+- `DELETE /api/v1/post/{id}` - Delete post
+- `POST /api/v1/post/{id}/like` - Toggle post like
+- `GET /api/v1/post/{id}/like-count` - Get post like count
+- `GET /api/v1/post/{id}/comment-count` - Get post comment count
+
+### Comments
+- `GET /api/v1/post/{postId}/comments` - Get post comments
+- `POST /api/v1/post/{postId}/comments` - Create comment
+- `PUT /api/v1/post/{postId}/comments/{commentId}` - Update comment
+- `DELETE /api/v1/post/{postId}/comments/{commentId}` - Delete comment
+
+### Media
+- `POST /api/v1/media/upload-image` - Upload image
+- `POST /api/v1/media/upload-video` - Upload video
+- `DELETE /api/v1/media/{publicId}` - Delete media
+
+## Response Format
+
+All API responses follow a consistent format:
+
+```json
+{
+  "success": true,
+  "message": "Operation completed successfully",
+  "data": { ... },
+  "timestamp": "2025-01-01T00:00:00.000Z"
+}
+```
+
+## Error Handling
+
+The API includes comprehensive error handling with:
+- Validation errors (400)
+- Authentication errors (401)
+- Authorization errors (403)
+- Not found errors (404)
+- Server errors (500)
+
+All errors include detailed messages and appropriate HTTP status codes.
+
+## Development
+
+### Project Structure
+```
+├── Controllers/          # API controllers
+├── Services/            # Business logic services
+├── Repositories/        # Data access layer
+├── Models/              # Entity models
+├── DTOs/                # Data transfer objects
+├── Middleware/          # Custom middleware
+├── Data/                # Database context
+└── Migrations/          # Database migrations
+```
+
+### Adding New Features
+1. Create entity model in `Models/`
+2. Add DTOs in `DTOs/`
+3. Create repository interface and implementation
+4. Create service interface and implementation
+5. Add controller endpoints
+6. Update Swagger documentation
 
 ## Contributing
 
-Feel free to contribute to this project. Please follow standard pull request procedures and coding best practices.
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests if applicable
+5. Submit a pull request
 
 ## License
 
-[Optional: Add license information here, e.g., MIT License] 
+This project is licensed under the MIT License. 

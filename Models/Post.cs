@@ -18,9 +18,8 @@ public class Post
     [StringLength(100)]
     public string Description { get; set; } = string.Empty;
 
-    [Required]
     [StringLength(255)]
-    public string VideoUrl { get; set; } = string.Empty;
+    public string? VideoUrl { get; set; } = string.Empty;
 
     public bool IsPublic { get; set; } = true;
 

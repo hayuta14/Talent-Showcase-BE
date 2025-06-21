@@ -14,10 +14,9 @@ public class UserProfileService : IUserProfileService
         _userRepository = userRepository;
     }
 
-    public async Task<User> GetProfileAsync(int userId)
+    public async Task<User?> GetProfileAsync(int userId)
     {
         var user = await _userRepository.GetUserByIdAsync(userId);
-        if (user == null) return null;
         return user;
     }
 
@@ -25,15 +24,19 @@ public class UserProfileService : IUserProfileService
     {
         var user = await _userRepository.GetUserByIdAsync(userId);
         if (user == null) throw new Exception("User not found");
+        user.Username = dto.Username;
         user.Bio = dto.Bio;
         user.Skill = dto.Skill;
         user.ProfilePictureUrl = dto.ImageUrl;
+        user.ContactInfo = dto.ContactInfo;
         await _userRepository.UpdateUserAsync(user);
         return new UserProfileDTO
         {
+            Username = user.Username,
             Bio = user.Bio ?? string.Empty,
             Skill = user.Skill ?? string.Empty,
-            ImageUrl = user.ProfilePictureUrl ?? string.Empty
+            ImageUrl = user.ProfilePictureUrl ?? string.Empty,
+            ContactInfo = user.ContactInfo ?? string.Empty
         };
     }
 

@@ -42,7 +42,10 @@ public class PostRepository : IPostRepository
 
     public async Task<(List<Post> Items, int TotalItems)> GetAllAsync(int page, int pageSize)
     {
-        var query = _context.Posts.AsQueryable();
+        var query = _context.Posts.Where(p => p.IsPublic)
+            .Include(p => p.User)
+            .OrderByDescending(p => p.UploadedAt)
+            .AsQueryable();
         var totalItems = await query.CountAsync();
         var items = await query.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
         return (items, totalItems);
@@ -83,7 +86,7 @@ public class PostRepository : IPostRepository
 
     public async Task<(List<Comment> Items, int TotalItems)> GetCommentsByPostIdAsync(int postId, int page, int pageSize)
     {
-        var query = _context.Comments.Where(c => c.PostId == postId);
+        var query = _context.Comments.Where(c => c.PostId == postId).Include(c => c.User);
         var totalItems = await query.CountAsync();
         var items = await query.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
         return (items, totalItems);

@@ -8,6 +8,9 @@ using TalentShowCase.API.Models;
 
 namespace TalentShowCase.API.Controllers;
 
+/// <summary>
+/// User profile management controller
+/// </summary>
 [ApiController]
 [Route("api/v1/[controller]")]
 [Authorize(Policy = "RequireUserRole")]
@@ -20,7 +23,17 @@ public class UserController : ControllerBase
         _userProfileService = userProfileService;
     }
 
+    /// <summary>
+    /// Get current user's profile information
+    /// </summary>
+    /// <returns>User profile data</returns>
+    /// <response code="200">Profile retrieved successfully</response>
+    /// <response code="401">Unauthorized</response>
+    /// <response code="404">Profile not found</response>
     [HttpGet("get-profile")]
+    [ProducesResponseType(typeof(ApiResponse<UserResponseDTO>), 200)]
+    [ProducesResponseType(typeof(ApiResponse<string>), 401)]
+    [ProducesResponseType(typeof(ApiResponse<string>), 404)]
     public async Task<ActionResult<ApiResponse<UserResponseDTO>>> GetProfile()
     {
         var (success, error, user) = await _userProfileService.GetProfileAsync(User);
@@ -33,7 +46,18 @@ public class UserController : ControllerBase
         return Ok(ApiResponse<UserResponseDTO>.Succeed(user!));
     }
 
+    /// <summary>
+    /// Create or update user profile
+    /// </summary>
+    /// <param name="dto">Profile information to update</param>
+    /// <returns>Updated profile data</returns>
+    /// <response code="200">Profile updated successfully</response>
+    /// <response code="400">Invalid profile data</response>
+    /// <response code="401">Unauthorized</response>
     [HttpPatch("create-profile")]
+    [ProducesResponseType(typeof(ApiResponse<UserProfileDTO>), 200)]
+    [ProducesResponseType(typeof(ApiResponse<string>), 400)]
+    [ProducesResponseType(typeof(ApiResponse<string>), 401)]
     public async Task<ActionResult<ApiResponse<UserProfileDTO>>> UpdateProfile([FromBody] UserProfileDTO dto)
     {
         var (success, error, updated) = await _userProfileService.UpdateProfileAsync(User, dto);

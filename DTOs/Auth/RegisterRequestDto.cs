@@ -5,18 +5,18 @@ namespace TalentShowCase.API.DTOs.Auth;
 public class RegisterRequestDto
 {
     [Required]
+    [StringLength(50)]
+    public string Username { get; set; } = string.Empty;
+
+    [Required]
     [EmailAddress]
     public string Email { get; set; } = string.Empty;
 
     [Required]
-    [MinLength(3)]
-    public string Username { get; set; } = string.Empty;
-
-    [Required]
-    [MinLength(6)]
+    [StringLength(100, MinimumLength = 6)]
     public string Password { get; set; } = string.Empty;
-    [Required]
-    [RegularExpression(@"^\+?\d{10,15}$", ErrorMessage = "Phone number must be between 10 and 15 digits and can start with '+'")]
-    public string PhoneNumber { get; set; }
 
+    [Required]
+    [StringLength(20)]
+    public string PhoneNumber { get; set; } = string.Empty;
 } 

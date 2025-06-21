@@ -2,13 +2,16 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using StackExchange.Redis;
 using System.Text;
 using TalentShowCase.API.Data;
 using TalentShowCase.API.Middleware;
 using TalentShowCase.API.Services;
 using TalentShowCase.API.Repositories;
+using TalentShowCase.API.Swagger;
 using Serilog;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -57,9 +60,10 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 
+    // Add JWT Authentication to Swagger
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
-        Description = "JWT Authorization header using the Bearer scheme",
+        Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
         Name = "Authorization",
         In = ParameterLocation.Header,
         Type = SecuritySchemeType.ApiKey,
@@ -80,6 +84,22 @@ builder.Services.AddSwaggerGen(c =>
             Array.Empty<string>()
         }
     });
+
+    // Configure for Orval compatibility
+    c.UseAllOfForInheritance();
+    c.UseOneOfForPolymorphism();
+    c.SelectDiscriminatorNameUsing(type => type.Name);
+    
+    // Add operation filters for better documentation
+    c.OperationFilter<SwaggerDefaultValues>();
+    
+    // Include XML comments if available
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    if (File.Exists(xmlPath))
+    {
+        c.IncludeXmlComments(xmlPath);
+    }
 });
 
 // Add PostgreSQL Database
@@ -135,6 +155,7 @@ builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IPostRepository, PostRepository>();
 builder.Services.AddScoped<IPostService, PostService>();
+builder.Services.AddScoped<ICloudinaryService, CloudinaryService>();
 
 // Add CORS
 var allowedOrigins = builder.Configuration.GetSection("CorsSettings:AllowedOrigins").Get<string[]>();
@@ -166,6 +187,14 @@ if (app.Environment.IsDevelopment())
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "Talent Show Case API V1");
         c.RoutePrefix = string.Empty; // To serve the Swagger UI at the app's root
+        c.DocumentTitle = "Talent Show Case API Documentation";
+        c.DefaultModelsExpandDepth(2);
+        c.DefaultModelExpandDepth(2);
+        c.DisplayRequestDuration();
+        c.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.None);
+        c.EnableDeepLinking();
+        c.EnableFilter();
+        c.ShowExtensions();
     });
 }
 
