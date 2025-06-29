@@ -17,4 +17,6 @@ public class TalentCategory
 
     // Navigation property
     public ICollection<Post> Posts { get; set; } = new List<Post>();
+    public ICollection<UserTalentCategory> UserTalentCategories { get; set; } = new List<UserTalentCategory>();
+    public ICollection<JobTalentCategory> JobTalentCategories { get; set; } = new List<JobTalentCategory>();
 } 

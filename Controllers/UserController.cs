@@ -47,6 +47,26 @@ public class UserController : ControllerBase
     }
 
     /// <summary>
+    /// Get user profile information by user ID
+    /// </summary>
+    /// <param name="userId">The ID of the user whose profile to retrieve</param>
+    /// <returns>User profile data</returns>
+    /// <response code="200">Profile retrieved successfully</response>
+    /// <response code="404">Profile not found</response>
+    [HttpGet("get-profile/{userId}")]
+    [ProducesResponseType(typeof(ApiResponse<UserResponseDTO>), 200)]
+    [ProducesResponseType(typeof(ApiResponse<string>), 404)]
+    public async Task<ActionResult<ApiResponse<UserResponseDTO>>> GetProfileById(int userId)
+    {
+        var (success, error, user) = await _userProfileService.GetProfileByIdAsync(userId);
+        if (!success)
+        {
+            return NotFound(ApiResponse<UserResponseDTO>.Fail(error!));
+        }
+        return Ok(ApiResponse<UserResponseDTO>.Succeed(user!));
+    }
+
+    /// <summary>
     /// Create or update user profile
     /// </summary>
     /// <param name="dto">Profile information to update</param>
@@ -58,7 +78,7 @@ public class UserController : ControllerBase
     [ProducesResponseType(typeof(ApiResponse<UserProfileDTO>), 200)]
     [ProducesResponseType(typeof(ApiResponse<string>), 400)]
     [ProducesResponseType(typeof(ApiResponse<string>), 401)]
-    public async Task<ActionResult<ApiResponse<UserProfileDTO>>> UpdateProfile([FromBody] UserProfileDTO dto)
+    public async Task<ActionResult<ApiResponse<UserProfileDTO>>> UpdateProfile([FromBody] CreateUserProfileDTO dto)
     {
         var (success, error, updated) = await _userProfileService.UpdateProfileAsync(User, dto);
         if (!success)

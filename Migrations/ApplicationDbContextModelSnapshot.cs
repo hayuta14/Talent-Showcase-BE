@@ -40,6 +40,10 @@ namespace TalentShowCase.API.Migrations
                     b.Property<int>("PostId")
                         .HasColumnType("integer");
 
+                    b.Property<string>("SubComments")
+                        .IsRequired()
+                        .HasColumnType("jsonb");
+
                     b.Property<int>("UserId")
                         .HasColumnType("integer");
 
@@ -120,6 +124,111 @@ namespace TalentShowCase.API.Migrations
                     b.HasIndex("FollowedId");
 
                     b.ToTable("Followers");
+                });
+
+            modelBuilder.Entity("TalentShowCase.API.Models.Job", b =>
+                {
+                    b.Property<int>("JobId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("JobId"));
+
+                    b.Property<string>("CompanyName")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<DateTime?>("ExpireAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("JobDescription")
+                        .HasColumnType("text");
+
+                    b.Property<string>("JobTitle")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("Location")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("Requirements")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Salary")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("JobId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Jobs");
+                });
+
+            modelBuilder.Entity("TalentShowCase.API.Models.JobApplication", b =>
+                {
+                    b.Property<int>("ApplicationId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ApplicationId"));
+
+                    b.Property<int>("ApplicantId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("AppliedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("CoverLetter")
+                        .HasColumnType("text");
+
+                    b.Property<int>("JobId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ResumeUrl")
+                        .HasColumnType("text");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("ApplicationId");
+
+                    b.HasIndex("ApplicantId");
+
+                    b.HasIndex("JobId", "ApplicantId")
+                        .IsUnique();
+
+                    b.ToTable("JobApplications");
+                });
+
+            modelBuilder.Entity("TalentShowCase.API.Models.JobTalentCategory", b =>
+                {
+                    b.Property<int>("JobId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("TalentCategoryId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Level")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("JobId", "TalentCategoryId");
+
+                    b.HasIndex("TalentCategoryId");
+
+                    b.ToTable("JobTalentCategories");
                 });
 
             modelBuilder.Entity("TalentShowCase.API.Models.Message", b =>
@@ -332,7 +441,12 @@ namespace TalentShowCase.API.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
 
+                    b.Property<int?>("UserId")
+                        .HasColumnType("integer");
+
                     b.HasKey("CategoryId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("TalentCategories");
                 });
@@ -380,10 +494,6 @@ namespace TalentShowCase.API.Migrations
                         .HasColumnType("integer")
                         .HasDefaultValue(2);
 
-                    b.Property<string>("Skill")
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -400,6 +510,25 @@ namespace TalentShowCase.API.Migrations
                         .IsUnique();
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("TalentShowCase.API.Models.UserTalentCategory", b =>
+                {
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("TalentCategoryId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Level")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("UserId", "TalentCategoryId");
+
+                    b.HasIndex("TalentCategoryId");
+
+                    b.ToTable("UserTalentCategories");
                 });
 
             modelBuilder.Entity("TalentShowCase.API.Models.Comment", b =>
@@ -468,6 +597,55 @@ namespace TalentShowCase.API.Migrations
                     b.Navigation("FollowedUser");
 
                     b.Navigation("FollowerUser");
+                });
+
+            modelBuilder.Entity("TalentShowCase.API.Models.Job", b =>
+                {
+                    b.HasOne("TalentShowCase.API.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("TalentShowCase.API.Models.JobApplication", b =>
+                {
+                    b.HasOne("TalentShowCase.API.Models.User", "Applicant")
+                        .WithMany("JobApplications")
+                        .HasForeignKey("ApplicantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TalentShowCase.API.Models.Job", "Job")
+                        .WithMany("Applications")
+                        .HasForeignKey("JobId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Applicant");
+
+                    b.Navigation("Job");
+                });
+
+            modelBuilder.Entity("TalentShowCase.API.Models.JobTalentCategory", b =>
+                {
+                    b.HasOne("TalentShowCase.API.Models.Job", "Job")
+                        .WithMany("JobTalentCategories")
+                        .HasForeignKey("JobId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TalentShowCase.API.Models.TalentCategory", "TalentCategory")
+                        .WithMany("JobTalentCategories")
+                        .HasForeignKey("TalentCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Job");
+
+                    b.Navigation("TalentCategory");
                 });
 
             modelBuilder.Entity("TalentShowCase.API.Models.Message", b =>
@@ -555,6 +733,13 @@ namespace TalentShowCase.API.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("TalentShowCase.API.Models.TalentCategory", b =>
+                {
+                    b.HasOne("TalentShowCase.API.Models.User", null)
+                        .WithMany("TalentCategories")
+                        .HasForeignKey("UserId");
+                });
+
             modelBuilder.Entity("TalentShowCase.API.Models.User", b =>
                 {
                     b.HasOne("TalentShowCase.API.Models.Role", "Role")
@@ -566,11 +751,37 @@ namespace TalentShowCase.API.Migrations
                     b.Navigation("Role");
                 });
 
+            modelBuilder.Entity("TalentShowCase.API.Models.UserTalentCategory", b =>
+                {
+                    b.HasOne("TalentShowCase.API.Models.TalentCategory", "TalentCategory")
+                        .WithMany("UserTalentCategories")
+                        .HasForeignKey("TalentCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TalentShowCase.API.Models.User", "User")
+                        .WithMany("UserTalentCategories")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("TalentCategory");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("TalentShowCase.API.Models.Community", b =>
                 {
                     b.Navigation("Members");
 
                     b.Navigation("Posts");
+                });
+
+            modelBuilder.Entity("TalentShowCase.API.Models.Job", b =>
+                {
+                    b.Navigation("Applications");
+
+                    b.Navigation("JobTalentCategories");
                 });
 
             modelBuilder.Entity("TalentShowCase.API.Models.Post", b =>
@@ -589,7 +800,11 @@ namespace TalentShowCase.API.Migrations
 
             modelBuilder.Entity("TalentShowCase.API.Models.TalentCategory", b =>
                 {
+                    b.Navigation("JobTalentCategories");
+
                     b.Navigation("Posts");
+
+                    b.Navigation("UserTalentCategories");
                 });
 
             modelBuilder.Entity("TalentShowCase.API.Models.User", b =>
@@ -604,6 +819,8 @@ namespace TalentShowCase.API.Migrations
 
                     b.Navigation("Following");
 
+                    b.Navigation("JobApplications");
+
                     b.Navigation("PostLikes");
 
                     b.Navigation("Posts");
@@ -613,6 +830,10 @@ namespace TalentShowCase.API.Migrations
                     b.Navigation("RefreshTokens");
 
                     b.Navigation("SentMessages");
+
+                    b.Navigation("TalentCategories");
+
+                    b.Navigation("UserTalentCategories");
                 });
 #pragma warning restore 612, 618
         }

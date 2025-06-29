@@ -25,9 +25,6 @@ public class User
     public string? Bio { get; set; }
 
     [StringLength(255)]
-    public string? Skill { get; set; }
-
-    [StringLength(255)]
     public string? ContactInfo { get; set; }
 
     [StringLength(255)]
@@ -54,4 +51,7 @@ public class User
     public ICollection<Follower> Followers { get; set; } = new List<Follower>();
     public ICollection<Follower> Following { get; set; } = new List<Follower>();
     public ICollection<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
+    public ICollection<TalentCategory> TalentCategories { get; set; } = new List<TalentCategory>();
+    public ICollection<UserTalentCategory> UserTalentCategories { get; set; } = new List<UserTalentCategory>();
+    public ICollection<JobApplication> JobApplications { get; set; } = new List<JobApplication>();
 } 

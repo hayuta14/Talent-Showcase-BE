@@ -117,4 +117,126 @@ public class PostRepository : IPostRepository
     {
         return await _context.Comments.CountAsync(c => c.PostId == postId);
     }
+
+    public async Task<List<Post>> GetPostsByUserIdAsync(int userId)
+    {
+        return await _context.Posts
+            .Where(p => p.UserId == userId && p.IsPublic)
+            .Include(p => p.User)
+            .OrderByDescending(p => p.UploadedAt)
+            .ToListAsync();
+    }
+
+    public async Task<Comment?> AddSubCommentAsync(int commentId, SubComment subComment)
+    {
+        var comment = await _context.Comments.FindAsync(commentId);
+        if (comment == null) return null;
+        if (comment.SubComments == null)
+            comment.SubComments = new List<SubComment>();
+        comment.SubComments.Add(subComment);
+        _context.Comments.Update(comment);
+        await _context.SaveChangesAsync();
+        return comment;
+    }
+
+    public async Task<Comment?> UpdateSubCommentAsync(int commentId, int subCommentIndex, string content)
+    {
+        var comment = await _context.Comments.FindAsync(commentId);
+        if (comment == null || comment.SubComments == null || subCommentIndex < 0 || subCommentIndex >= comment.SubComments.Count)
+            return null;
+        comment.SubComments[subCommentIndex].Content = content;
+        _context.Comments.Update(comment);
+        await _context.SaveChangesAsync();
+        return comment;
+    }
+
+    public async Task<Comment?> DeleteSubCommentAsync(int commentId, int subCommentIndex)
+    {
+        var comment = await _context.Comments.FindAsync(commentId);
+        if (comment == null || comment.SubComments == null || subCommentIndex < 0 || subCommentIndex >= comment.SubComments.Count)
+            return null;
+        comment.SubComments.RemoveAt(subCommentIndex);
+        _context.Comments.Update(comment);
+        await _context.SaveChangesAsync();
+        return comment;
+    }
+
+    public async Task<(int CommentCount, int SubCommentCount, int TotalCount)> GetCommentAndSubCommentCountAsync(int postId)
+    {
+        var comments = await _context.Comments.Where(c => c.PostId == postId).ToListAsync();
+        int commentCount = comments.Count;
+        int subCommentCount = 0;
+        foreach (var c in comments)
+        {
+            int count = c.SubComments?.Count ?? 0;
+            Console.WriteLine($"CommentId: {c.CommentId}, SubCommentCount: {count}");
+            subCommentCount += count;
+        }
+        int total = commentCount + subCommentCount;
+        Console.WriteLine($"Total comment: {commentCount}, total subcomment: {subCommentCount}, total: {total}");
+        return (commentCount, subCommentCount, total);
+    }
+
+    public async Task<Dictionary<int, User>> GetUserDictionaryByIds(List<int> userIds)
+    {
+        if (userIds == null || userIds.Count == 0) return new Dictionary<int, User>();
+        var users = await _context.Users.Where(u => userIds.Contains(u.UserId)).ToListAsync();
+        return users.ToDictionary(u => u.UserId, u => u);
+    }
+
+    // Community post methods
+    public async Task<List<Post>> GetCommunityPostsAsync(int communityId, int page, int pageSize, string? searchTerm = null, int? categoryId = null, string sortBy = "newest")
+    {
+        var query = _context.Posts
+            .Where(p => p.CommunityId == communityId)
+            .Include(p => p.User)
+            .Include(p => p.Category)
+            .Include(p => p.Likes)
+            .Include(p => p.Comments)
+            .AsQueryable();
+
+        // Apply search filter
+        if (!string.IsNullOrWhiteSpace(searchTerm))
+        {
+            query = query.Where(p => p.Description.Contains(searchTerm));
+        }
+
+        // Apply category filter
+        if (categoryId.HasValue)
+        {
+            query = query.Where(p => p.CategoryId == categoryId);
+        }
+
+        // Apply sorting
+        query = sortBy.ToLower() switch
+        {
+            "oldest" => query.OrderBy(p => p.UploadedAt),
+            "mostLiked" => query.OrderByDescending(p => p.Likes.Count),
+            "mostCommented" => query.OrderByDescending(p => p.Comments.Count),
+            _ => query.OrderByDescending(p => p.UploadedAt) // newest
+        };
+
+        return await query
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+    }
+
+    public async Task<List<Post>> GetCommunityPostsByUserAsync(int communityId, int userId)
+    {
+        return await _context.Posts
+            .Where(p => p.CommunityId == communityId && p.UserId == userId)
+            .Include(p => p.User)
+            .Include(p => p.Category)
+            .Include(p => p.Likes)
+            .Include(p => p.Comments)
+            .OrderByDescending(p => p.UploadedAt)
+            .ToListAsync();
+    }
+
+    public async Task<int> GetCommunityPostCountAsync(int communityId)
+    {
+        return await _context.Posts
+            .CountAsync(p => p.CommunityId == communityId);
+    }
 } 

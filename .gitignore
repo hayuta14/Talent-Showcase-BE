@@ -73,3 +73,5 @@ bld/
 =======
 *.nuget.targets 
 >>>>>>> 880663d (init project)
+
+.fake

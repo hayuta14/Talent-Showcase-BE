@@ -7,9 +7,9 @@ namespace TalentShowCase.API.Services;
 public interface IUserProfileService
 {
     Task<User?> GetProfileAsync(int userId);
-    Task<UserProfileDTO> UpdateProfileAsync(int userId, UserProfileDTO dto);
 
     // New for controller
     Task<(bool Success, string? Error, UserResponseDTO? Profile)> GetProfileAsync(ClaimsPrincipal userClaims);
-    Task<(bool Success, string? Error, UserProfileDTO? Profile)> UpdateProfileAsync(ClaimsPrincipal userClaims, UserProfileDTO dto);
+    Task<(bool Success, string? Error, UserResponseDTO? Profile)> GetProfileByIdAsync(int userId);
+    Task<(bool Success, string? Error, UserProfileDTO? Profile)> UpdateProfileAsync(ClaimsPrincipal userClaims, CreateUserProfileDTO dto);
 } 

@@ -1,4 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using System.Text.Json;
 using TalentShowCase.API.Models;
 using Microsoft.Extensions.Logging;
 
@@ -27,6 +29,10 @@ public class ApplicationDbContext : DbContext
     public DbSet<CommunityMember> CommunityMembers { get; set; } = null!;
     public DbSet<TalentCategory> TalentCategories { get; set; } = null!;
     public DbSet<Role> Roles { get; set; } = null!;
+    public DbSet<UserTalentCategory> UserTalentCategories { get; set; } = null!;
+    public DbSet<Job> Jobs { get; set; } = null!;
+    public DbSet<JobTalentCategory> JobTalentCategories { get; set; } = null!;
+    public DbSet<JobApplication> JobApplications { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -150,6 +156,16 @@ public class ApplicationDbContext : DbContext
             .HasForeignKey(c => c.UserId)
             .OnDelete(DeleteBehavior.Cascade);
 
+        // Cấu hình SubComments lưu dạng jsonb với ValueConverter
+        var subCommentConverter = new ValueConverter<List<SubComment>, string>(
+            v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),
+            v => JsonSerializer.Deserialize<List<SubComment>>(v, (JsonSerializerOptions)null) ?? new List<SubComment>()
+        );
+        modelBuilder.Entity<Comment>()
+            .Property(c => c.SubComments)
+            .HasConversion(subCommentConverter)
+            .HasColumnType("jsonb");
+
         // Community configurations
         modelBuilder.Entity<Community>()
             .HasOne(c => c.Creator)
@@ -172,5 +188,46 @@ public class ApplicationDbContext : DbContext
             .WithMany(u => u.CommunityMemberships)
             .HasForeignKey(cm => cm.UserId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        // Many-to-many: User <-> TalentCategory với trường level
+        modelBuilder.Entity<UserTalentCategory>()
+            .HasKey(utc => new { utc.UserId, utc.TalentCategoryId });
+        modelBuilder.Entity<UserTalentCategory>()
+            .HasOne(utc => utc.User)
+            .WithMany(u => u.UserTalentCategories)
+            .HasForeignKey(utc => utc.UserId);
+        modelBuilder.Entity<UserTalentCategory>()
+            .HasOne(utc => utc.TalentCategory)
+            .WithMany(tc => tc.UserTalentCategories)
+            .HasForeignKey(utc => utc.TalentCategoryId);
+
+        // Many-to-many: Job <-> TalentCategory
+        modelBuilder.Entity<JobTalentCategory>()
+            .HasKey(jtc => new { jtc.JobId, jtc.TalentCategoryId });
+        modelBuilder.Entity<JobTalentCategory>()
+            .HasOne(jtc => jtc.Job)
+            .WithMany(j => j.JobTalentCategories)
+            .HasForeignKey(jtc => jtc.JobId);
+        modelBuilder.Entity<JobTalentCategory>()
+            .HasOne(jtc => jtc.TalentCategory)
+            .WithMany(tc => tc.JobTalentCategories)
+            .HasForeignKey(jtc => jtc.TalentCategoryId);
+
+        // JobApplication configurations
+        modelBuilder.Entity<JobApplication>()
+            .HasOne(ja => ja.Job)
+            .WithMany(j => j.Applications)
+            .HasForeignKey(ja => ja.JobId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<JobApplication>()
+            .HasOne(ja => ja.Applicant)
+            .WithMany(u => u.JobApplications)
+            .HasForeignKey(ja => ja.ApplicantId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<JobApplication>()
+            .HasIndex(ja => new { ja.JobId, ja.ApplicantId })
+            .IsUnique();
     }
 } 
