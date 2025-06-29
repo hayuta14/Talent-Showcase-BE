@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\cnguy\\OneDrive\\Máy tính\\FPT-Aptech\\APTECH_PJ\\3\\Talent-Showcase-BE\\TalentShowCase.API.csproj": {}
+    "/home/hayuta/Documents/program/C-Sharp/TalentShowCase-BE/Talent-Showcase-BE/TalentShowCase.API.csproj": {}
   },
   "projects": {
-    "C:\\Users\\cnguy\\OneDrive\\Máy tính\\FPT-Aptech\\APTECH_PJ\\3\\Talent-Showcase-BE\\TalentShowCase.API.csproj": {
+    "/home/hayuta/Documents/program/C-Sharp/TalentShowCase-BE/Talent-Showcase-BE/TalentShowCase.API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\cnguy\\OneDrive\\Máy tính\\FPT-Aptech\\APTECH_PJ\\3\\Talent-Showcase-BE\\TalentShowCase.API.csproj",
+        "projectUniqueName": "/home/hayuta/Documents/program/C-Sharp/TalentShowCase-BE/Talent-Showcase-BE/TalentShowCase.API.csproj",
         "projectName": "TalentShowCase.API",
-        "projectPath": "C:\\Users\\cnguy\\OneDrive\\Máy tính\\FPT-Aptech\\APTECH_PJ\\3\\Talent-Showcase-BE\\TalentShowCase.API.csproj",
-        "packagesPath": "C:\\Users\\cnguy\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\cnguy\\OneDrive\\Máy tính\\FPT-Aptech\\APTECH_PJ\\3\\Talent-Showcase-BE\\obj\\",
+        "projectPath": "/home/hayuta/Documents/program/C-Sharp/TalentShowCase-BE/Talent-Showcase-BE/TalentShowCase.API.csproj",
+        "packagesPath": "/home/hayuta/.nuget/packages/",
+        "outputPath": "/home/hayuta/Documents/program/C-Sharp/TalentShowCase-BE/Talent-Showcase-BE/obj/",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -39,20 +39,57 @@
           "warnAsError": [
             "NU1605"
           ]
-        },
-        "restoreAuditProperties": {
-          "enableAudit": "true",
-          "auditLevel": "low",
-          "auditMode": "direct"
         }
       },
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "BCrypt.Net-Next": {
+              "target": "Package",
+              "version": "[4.0.3, )"
+            },
+            "CloudinaryDotNet": {
+              "target": "Package",
+              "version": "[1.27.5, )"
+            },
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[8.0.2, )"
+            },
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",
               "version": "[8.0.0, )"
+            },
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[8.0.2, )"
+            },
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[8.0.2, )"
+            },
+            "Npgsql.EntityFrameworkCore.PostgreSQL": {
+              "target": "Package",
+              "version": "[8.0.2, )"
+            },
+            "Serilog.AspNetCore": {
+              "target": "Package",
+              "version": "[8.0.1, )"
+            },
+            "Serilog.Sinks.Console": {
+              "target": "Package",
+              "version": "[5.0.1, )"
+            },
+            "Serilog.Sinks.File": {
+              "target": "Package",
+              "version": "[5.0.0, )"
+            },
+            "StackExchange.Redis": {
+              "target": "Package",
+              "version": "[2.7.17, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
@@ -78,7 +115,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.403/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/8.0.117/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

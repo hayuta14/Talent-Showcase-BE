@@ -1,0 +1,39 @@
+### Test General Search API
+GET {{baseUrl}}/api/v1/search?query=music&type=all&page=1&pageSize=10&sortBy=relevance&sortOrder=desc
+Authorization: Bearer {{token}}
+
+### Test Search Users
+GET {{baseUrl}}/api/v1/search/users?query=john&page=1&pageSize=5
+Authorization: Bearer {{token}}
+
+### Test Search Communities
+GET {{baseUrl}}/api/v1/search/communities?query=dance&page=1&pageSize=5
+Authorization: Bearer {{token}}
+
+### Test Search Jobs
+GET {{baseUrl}}/api/v1/search/jobs?query=developer&level=senior&page=1&pageSize=5
+Authorization: Bearer {{token}}
+
+### Test Search Talents
+GET {{baseUrl}}/api/v1/search/talents?query=music&page=1&pageSize=5
+Authorization: Bearer {{token}}
+
+### Test Search Posts
+GET {{baseUrl}}/api/v1/search/posts?query=performance&page=1&pageSize=5&sortBy=date&sortOrder=desc
+Authorization: Bearer {{token}}
+
+### Test Get Available Filters
+GET {{baseUrl}}/api/v1/search/filters
+Authorization: Bearer {{token}}
+
+### Test Search with Level Filter
+GET {{baseUrl}}/api/v1/search?query=artist&type=job&level=expert&page=1&pageSize=10
+Authorization: Bearer {{token}}
+
+### Test Search with Date Sorting
+GET {{baseUrl}}/api/v1/search?query=show&type=post&sortBy=date&sortOrder=desc&page=1&pageSize=10
+Authorization: Bearer {{token}}
+
+### Variables (set these in your environment)
+# @baseUrl = http://localhost:5000
+# @token = your-jwt-token-here 

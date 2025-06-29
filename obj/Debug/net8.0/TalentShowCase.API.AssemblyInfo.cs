@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TalentShowCase.API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+774659e28261b2fc6c6369d420a994fe427a2b35")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+02846f50bbc38d8dc72f0ae4119791db1ad30168")]
 [assembly: System.Reflection.AssemblyProductAttribute("TalentShowCase.API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TalentShowCase.API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
